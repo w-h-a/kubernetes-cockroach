@@ -104,7 +104,7 @@ resource "kubernetes_stateful_set" "cockroachdb" {
 resource "kubernetes_service" "cockroachdb_public" {
   metadata {
     namespace = var.cockroachdb_namespace
-    name      = "cockroachdb"
+    name      = "cockroachdb-public"
     labels    = local.cockroachdb_labels
   }
 
