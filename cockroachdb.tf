@@ -169,3 +169,35 @@ resource "kubernetes_pod_disruption_budget" "cockroachdb" {
     }
   }
 }
+
+resource "kubernetes_job" "cockroachdb_init" {
+  metadata {
+    namespace = var.cockroachdb_namespace
+    name      = "cockroachdb-init"
+    labels    = local.cockroachdb_labels
+  }
+
+  spec {
+    template {
+      metadata {
+
+      }
+      spec {
+        active_deadline_seconds = 300
+        restart_policy          = "OnFailure"
+
+        container {
+          name              = "cluster-init"
+          image             = var.cockroachdb_image
+          image_pull_policy = "IfNotPresent"
+          command = [
+            "/cockroach/cockroach",
+            "init",
+            "--insecure",
+            "--host=${kubernetes_service.cockroachdb.metadata.0.name}-0.${kubernetes_service.cockroachdb.metadata.0.name}"
+          ]
+        }
+      }
+    }
+  }
+}
