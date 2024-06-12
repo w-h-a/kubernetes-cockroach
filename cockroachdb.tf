@@ -6,7 +6,7 @@ resource "kubernetes_stateful_set" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = locals.cockroachdb_labels
+    labels    = local.cockroachdb_labels
   }
 
   spec {
@@ -15,12 +15,12 @@ resource "kubernetes_stateful_set" "cockroachdb" {
     pod_management_policy = "Parallel"
 
     selector {
-      match_labels = locals.cockroachdb_labels
+      match_labels = local.cockroachdb_labels
     }
 
     template {
       metadata {
-        labels = locals.cockroachdb_labels
+        labels = local.cockroachdb_labels
       }
 
       spec {
@@ -105,7 +105,7 @@ resource "kubernetes_service" "cockroachdb_public" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = locals.cockroachdb_labels
+    labels    = local.cockroachdb_labels
   }
 
   spec {
@@ -121,7 +121,7 @@ resource "kubernetes_service" "cockroachdb_public" {
       target_port = "http"
     }
 
-    selector = locals.cockroachdb_labels
+    selector = local.cockroachdb_labels
   }
 }
 
@@ -129,7 +129,7 @@ resource "kubernetes_service" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = locals.cockroachdb_labels
+    labels    = local.cockroachdb_labels
     annotations = {
       "service.alpha.kubernetes.io/tolerate-unready-endpoints" = "true"
     }
@@ -150,7 +150,7 @@ resource "kubernetes_service" "cockroachdb" {
 
     publish_not_ready_addresses = true
     cluster_ip                  = "None"
-    selector                    = locals.cockroachdb_labels
+    selector                    = local.cockroachdb_labels
   }
 }
 
@@ -158,14 +158,14 @@ resource "kubernetes_pod_disruption_budget" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = locals.cockroachdb_labels
+    labels    = local.cockroachdb_labels
   }
 
   spec {
     max_unavailable = 1
 
     selector {
-      match_labels = locals.cockroachdb_labels
+      match_labels = local.cockroachdb_labels
     }
   }
 }
