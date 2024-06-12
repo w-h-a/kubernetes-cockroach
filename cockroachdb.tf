@@ -171,6 +171,8 @@ resource "kubernetes_pod_disruption_budget_v1" "cockroachdb" {
 }
 
 resource "kubernetes_job_v1" "cockroachdb_init" {
+  wait_for_completion = false
+
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb-init"
@@ -183,18 +185,7 @@ resource "kubernetes_job_v1" "cockroachdb_init" {
 
       }
       spec {
-        restart_policy          = "OnFailure"
-        active_deadline_seconds = 300
-
-        init_container {
-          name  = "wait-for-cluster"
-          image = "alpine:3.20.0"
-          command = [
-            "/bin/sh",
-            "-c",
-            "until wget -O - http://${kubernetes_service.cockroachdb.metadata.0.name}-${kubernetes_stateful_set.cockroachdb.spec.0.replicas - 1}.${kubernetes_service.cockroachdb.metadata.0.name}:${kubernetes_service.cockroachdb.spec.0.port.1.port}/health; do sleep 5; done; echo Waiting 20 seconds; sleep 20"
-          ]
-        }
+        restart_policy = "OnFailure"
 
         container {
           name              = "cluster-init"
