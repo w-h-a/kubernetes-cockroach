@@ -6,7 +6,7 @@ resource "kubernetes_stateful_set" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = local.cockroachdb_labels
+    labels    = locals.cockroachdb_labels
   }
 
   spec {
@@ -15,12 +15,12 @@ resource "kubernetes_stateful_set" "cockroachdb" {
     pod_management_policy = "Parallel"
 
     selector {
-      match_labels = local.cockroachdb_labels
+      match_labels = locals.cockroachdb_labels
     }
 
     template {
       metadata {
-        labels = local.cockroachdb_labels
+        labels = locals.cockroachdb_labels
       }
 
       spec {
@@ -58,8 +58,8 @@ resource "kubernetes_stateful_set" "cockroachdb" {
           }
 
           env {
-            name  = COCKROACH_CHANNEL
-            value = kubernetes-insecure
+            name  = "COCKROACH_CHANNEL"
+            value = "kubernetes-insecure"
           }
 
           command = [
@@ -105,7 +105,7 @@ resource "kubernetes_service" "cockroachdb_public" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = local.cockroachdb_labels
+    labels    = locals.cockroachdb_labels
   }
 
   spec {
@@ -129,7 +129,7 @@ resource "kubernetes_service" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = local.cockroachdb_labels
+    labels    = locals.cockroachdb_labels
     annotations = {
       "service.alpha.kubernetes.io/tolerate-unready-endpoints" = "true"
     }
@@ -158,14 +158,14 @@ resource "kubernetes_pod_disruption_budget" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
-    labels    = local.cockroachdb_labels
+    labels    = locals.cockroachdb_labels
   }
 
   spec {
     max_unavailable = 1
 
     selector {
-      match_labels = local.cockroachdb_labels
+      match_labels = locals.cockroachdb_labels
     }
   }
 }
