@@ -170,7 +170,7 @@ resource "kubernetes_pod_disruption_budget_v1" "cockroachdb" {
   }
 }
 
-resource "kubernetes_job" "cockroachdb_init" {
+resource "kubernetes_job_v1" "cockroachdb_init" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb-init"
