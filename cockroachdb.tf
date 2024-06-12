@@ -183,8 +183,7 @@ resource "kubernetes_job_v1" "cockroachdb_init" {
 
       }
       spec {
-        active_deadline_seconds = 300
-        restart_policy          = "OnFailure"
+        restart_policy = "OnFailure"
 
         container {
           name              = "cluster-init"
