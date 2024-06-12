@@ -188,7 +188,7 @@ resource "kubernetes_job_v1" "cockroachdb_init" {
 
         init_container {
           name  = "wait-for-cluster"
-          image = "alpine:3.9"
+          image = "alpine:3.20.0"
           command = [
             "/bin/sh",
             "-c",
