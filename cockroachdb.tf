@@ -154,7 +154,7 @@ resource "kubernetes_service" "cockroachdb" {
   }
 }
 
-resource "kubernetes_pod_disruption_budget" "cockroachdb" {
+resource "kubernetes_pod_disruption_budget_v1" "cockroachdb" {
   metadata {
     namespace = var.cockroachdb_namespace
     name      = "cockroachdb"
